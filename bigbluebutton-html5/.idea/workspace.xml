@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:upstream" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:my-changes-branch" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9bbede0f-ec9b-4d2f-8f55-e6efa2ccac7a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../akka-bbb-apps/src/main/scala/org/bigbluebutton/core/apps/whiteboard/SendCursorPositionPubMsgHdlr.scala" beforeDir="false" afterPath="$PROJECT_DIR$/../akka-bbb-apps/src/main/scala/org/bigbluebutton/core/apps/whiteboard/SendCursorPositionPubMsgHdlr.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/api/audio/client/bridge/sip.js" beforeDir="false" afterPath="$PROJECT_DIR$/imports/api/audio/client/bridge/sip.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/startup/server/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/imports/startup/server/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/ui/components/actions-bar/component.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/imports/ui/components/actions-bar/component.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/ui/components/cursor/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/imports/ui/components/cursor/service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/ui/components/presentation/presentation-uploader/component.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/imports/ui/components/presentation/presentation-uploader/component.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/ui/components/video-preview/component.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/imports/ui/components/video-preview/component.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/ui/components/video-provider/component.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/imports/ui/components/video-provider/component.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/ui/components/video-provider/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/imports/ui/components/video-provider/service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/ui/components/video-provider/video-list/component.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/imports/ui/components/video-provider/video-list/component.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/ui/components/video-provider/video-list/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/imports/ui/components/video-provider/video-list/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/ui/components/video-provider/video-list/video-list-item/component.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/imports/ui/components/video-provider/video-list/video-list-item/container.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/private/config/settings.yml" beforeDir="false" afterPath="$PROJECT_DIR$/private/config/settings.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/compatibility/kurento-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/compatibility/kurento-utils.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1jSNecaSapyuTRXI7ROWWwgItDf" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="HbShouldOpenHtmlAsHb" value="enabled" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="js.meteor.library.cached" value="$PROJECT_DIR$/.meteor" />
+    <property name="js.meteor.library.was.enabled" value="true" />
+    <property name="js.meteor.project" value="true" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/bigbluebutton/bigbluebutton-html5" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/imports/ui/components/video-provider/video-list/video-list-item" />
+      <recent name="$PROJECT_DIR$/imports/ui/components/video-provider/video-list/video-list-frame" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/imports/ui/components/video-provider/video-list/video-list-frame" />
+      <recent name="$PROJECT_DIR$/imports/ui/components/video-provider/video-list/video-list-frame-item" />
+      <recent name="$PROJECT_DIR$/imports/ui/components/video-provider" />
+      <recent name="$PROJECT_DIR$/imports/ui/components/video-frame-preview" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Unnamed" type="meteor-app-runner" factoryName="Meteor" nameIsGenerated="true">
+      <option name="exePath" value="/usr/local/bin/meteor" />
+      <option name="startBrowserSettings">
+        <browser url="http://127.0.0.1/html5client" />
+      </option>
+      <meteor-runner-state>
+        <startBrowserSettings>
+          <browser url="http://127.0.0.1/html5client" />
+        </startBrowserSettings>
+      </meteor-runner-state>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="meteor-app-runner" factoryName="Meteor">
+      <option name="exePath" value="/usr/local/bin/meteor" />
+      <option name="startBrowserSettings">
+        <browser url="http://127.0.0.1/html5client" />
+      </option>
+      <meteor-runner-state>
+        <startBrowserSettings>
+          <browser url="http://127.0.0.1/html5client" />
+        </startBrowserSettings>
+      </meteor-runner-state>
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9bbede0f-ec9b-4d2f-8f55-e6efa2ccac7a" name="Default Changelist" comment="" />
+      <created>1603787291329</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1603787291329</updated>
+      <workItem from="1603787293482" duration="5455000" />
+      <workItem from="1603793632752" duration="32000" />
+      <workItem from="1603793667283" duration="1445000" />
+      <workItem from="1603795117189" duration="3579000" />
+      <workItem from="1603871808657" duration="1139000" />
+      <workItem from="1603876471255" duration="4939000" />
+      <workItem from="1603963195874" duration="4174000" />
+      <workItem from="1604222266912" duration="4830000" />
+      <workItem from="1604475712371" duration="10693000" />
+      <workItem from="1604689901748" duration="10332000" />
+      <workItem from="1604737705765" duration="9614000" />
+      <workItem from="1604845357896" duration="9208000" />
+      <workItem from="1605038974149" duration="6249000" />
+      <workItem from="1605045245048" duration="542000" />
+      <workItem from="1605363503736" duration="11606000" />
+      <workItem from="1605453107196" duration="4302000" />
+      <workItem from="1605560002263" duration="4253000" />
+      <workItem from="1605968798341" duration="12937000" />
+      <workItem from="1606057528455" duration="6581000" />
+      <workItem from="1606162619754" duration="4370000" />
+      <workItem from="1606168119651" duration="976000" />
+      <workItem from="1606334630192" duration="5103000" />
+      <workItem from="1606574631172" duration="1506000" />
+      <workItem from="1607673796987" duration="3920000" />
+      <workItem from="1607935631990" duration="35000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="my-changes-branch" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="844" y="430" key="#ESLint" timestamp="1604484778218">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state x="844" y="430" key="#ESLint/65.24.1855.1056@65.24.1855.1056" timestamp="1604484778218" />
+    <state x="457" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1604693177963">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state x="457" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog/65.24.1855.1056@65.24.1855.1056" timestamp="1604693177963" />
+    <state x="779" y="297" width="424" height="482" key="FileChooserDialogImpl" timestamp="1606162652108">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state x="779" y="297" width="424" height="482" key="FileChooserDialogImpl/65.24.1855.1056@65.24.1855.1056" timestamp="1606162652108" />
+    <state width="1832" height="356" key="GridCell.Tab.0.bottom" timestamp="1604700242415">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.0.bottom/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242415" />
+    <state width="1832" height="356" key="GridCell.Tab.0.center" timestamp="1604700242415">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.0.center/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242415" />
+    <state width="1832" height="356" key="GridCell.Tab.0.left" timestamp="1604700242414">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.0.left/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242414" />
+    <state width="1832" height="356" key="GridCell.Tab.0.right" timestamp="1604700242415">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.0.right/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242415" />
+    <state width="1832" height="356" key="GridCell.Tab.1.bottom" timestamp="1604700242416">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.1.bottom/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242416" />
+    <state width="1832" height="356" key="GridCell.Tab.1.center" timestamp="1604700242416">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.1.center/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242416" />
+    <state width="1832" height="356" key="GridCell.Tab.1.left" timestamp="1604700242415">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.1.left/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242415" />
+    <state width="1832" height="356" key="GridCell.Tab.1.right" timestamp="1604700242416">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.1.right/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242416" />
+    <state width="1832" height="356" key="GridCell.Tab.2.bottom" timestamp="1604700242417">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.2.bottom/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242417" />
+    <state width="1832" height="356" key="GridCell.Tab.2.center" timestamp="1604700242416">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.2.center/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242416" />
+    <state width="1832" height="356" key="GridCell.Tab.2.left" timestamp="1604700242416">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.2.left/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242416" />
+    <state width="1832" height="356" key="GridCell.Tab.2.right" timestamp="1604700242417">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.2.right/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242417" />
+    <state width="1832" height="356" key="GridCell.Tab.3.bottom" timestamp="1604700242417">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.3.bottom/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242417" />
+    <state width="1832" height="356" key="GridCell.Tab.3.center" timestamp="1604700242417">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.3.center/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242417" />
+    <state width="1832" height="356" key="GridCell.Tab.3.left" timestamp="1604700242417">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.3.left/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242417" />
+    <state width="1832" height="356" key="GridCell.Tab.3.right" timestamp="1604700242417">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="356" key="GridCell.Tab.3.right/65.24.1855.1056@65.24.1855.1056" timestamp="1604700242417" />
+    <state x="967" y="221" width="708" height="783" key="find.popup" timestamp="1605040040611">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state x="967" y="221" width="708" height="783" key="find.popup/65.24.1855.1056@65.24.1855.1056" timestamp="1605040040611" />
+    <state x="640" y="258" width="700" height="530" key="recent.locations.popup" timestamp="1604845797379">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state x="640" y="258" width="700" height="530" key="recent.locations.popup/65.24.1855.1056@65.24.1855.1056" timestamp="1604845797379" />
+    <state x="656" y="246" key="run.anything.popup" timestamp="1604697069550">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state x="656" y="246" key="run.anything.popup/65.24.1855.1056@65.24.1855.1056" timestamp="1604697069550" />
+    <state x="655" y="236" width="672" height="678" key="search.everywhere.popup" timestamp="1605560530030">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state x="655" y="236" width="672" height="678" key="search.everywhere.popup/65.24.1855.1056@65.24.1855.1056" timestamp="1605560530030" />
+    <state x="721" y="452" width="540" height="170" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1603791036190">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state x="721" y="452" width="540" height="170" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/65.24.1855.1056@65.24.1855.1056" timestamp="1603791036190" />
+  </component>
+</project>
