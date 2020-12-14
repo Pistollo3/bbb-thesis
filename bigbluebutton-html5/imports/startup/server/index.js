@@ -111,15 +111,15 @@ WebApp.connectHandlers.use('/locale', (req, res) => {
   const fallback = APP_CONFIG.defaultSettings.application.fallbackLocale;
   const override = APP_CONFIG.defaultSettings.application.overrideLocale;
   const browserLocale = override && req.query.init === 'true'
-    ? override.split(/[-_]/g) : req.query.locale.split(/[-_]/g);
+      ? override.split(/[-_]/g) : req.query.locale.split(/[-_]/g);
 
   const localeList = [fallback];
 
   const usableLocales = AVAILABLE_LOCALES
-    .map(file => file.replace('.json', ''))
-    .reduce((locales, locale) => (locale.match(browserLocale[0])
-      ? [...locales, locale]
-      : locales), []);
+      .map(file => file.replace('.json', ''))
+      .reduce((locales, locale) => (locale.match(browserLocale[0])
+          ? [...locales, locale]
+          : locales), []);
 
   const regionDefault = usableLocales.find(locale => browserLocale[0] === locale);
 
@@ -153,12 +153,12 @@ WebApp.connectHandlers.use('/locales', (req, res) => {
   let locales = [];
   try {
     locales = AVAILABLE_LOCALES
-      .map(file => file.replace('.json', ''))
-      .map(file => file.replace('_', '-'))
-      .map(locale => ({
-        locale,
-        name: Langmap[locale].nativeName,
-      }));
+        .map(file => file.replace('.json', ''))
+        .map(file => file.replace('_', '-'))
+        .map(locale => ({
+          locale,
+          name: Langmap[locale].nativeName,
+        }));
   } catch (e) {
     Logger.warn(`'Could not process locales error: ${e}`);
   }

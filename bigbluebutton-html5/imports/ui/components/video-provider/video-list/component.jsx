@@ -11,7 +11,9 @@ import logger from '/imports/startup/client/logger';
 import playAndRetry from '/imports/utils/mediaElementPlayRetry';
 import VideoService from '/imports/ui/components/video-provider/service';
 import Button from '/imports/ui/components/button/component';
-import VideoListFrameContainer from "./video-list-frame/container";
+import VideoListFrameContainer from './video-list-frame/container';
+
+/*eslint-disable*/
 
 const propTypes = {
   streams: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -260,65 +262,6 @@ class VideoList extends Component {
     );
   }
 
-  renderVideoList() {
-    const {
-      intl,
-      streams,
-      onMount,
-      swapLayout,
-    } = this.props;
-    const { focusedId } = this.state;
-
-    const numOfStreams = streams.length;
-    return streams
-        .filter((stream) => {
-      const { cameraId, userId, name } = stream;
-      let copy = cameraId.slice();
-      copy = copy.substr(15, copy.length+1)
-      const valueee = Session.get(copy)
-      return !(VideoService.isLocalStream(cameraId) && valueee === "frame")
-      })
-      .map((stream) => {
-      const { cameraId, userId, name } = stream;
-      const isFocused = focusedId === cameraId;
-      const isFocusedIntlKey = !isFocused ? 'focus' : 'unfocus';
-      let actions = [];
-
-      if (numOfStreams > 2) {
-        actions = [{
-          label: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Label`]),
-          description: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Desc`]),
-          onClick: () => this.handleVideoFocus(cameraId),
-        }];
-      }
-
-        logger.info('RENDERING OTHER VIDEO')
-
-      return (
-        <div
-          key={cameraId}
-          className={cx({
-            [styles.videoListItem]: true,
-            [styles.focused]: focusedId === cameraId && numOfStreams > 2,
-          })}
-        >
-          <VideoListItemContainer
-            numOfStreams={numOfStreams}
-            cameraId={cameraId}
-            userId={userId}
-            name={name}
-            actions={actions}
-            onMount={(videoRef) => {
-              this.handleCanvasResize();
-              onMount(cameraId, videoRef);
-            }}
-            swapLayout={swapLayout}
-          />
-        </div>
-      );
-    });
-  }
-
   renderOwnVideo() {
     const {
       intl,
@@ -330,12 +273,12 @@ class VideoList extends Component {
 
     const numOfStreams = streams.length;
     return streams
-          .filter((stream) => {
-        const { cameraId, userId, name } = stream;
-        let copy = cameraId.slice();
-        copy = copy.substr(15, copy.length+1)
-        const valueee = Session.get(copy)
-        return (VideoService.isLocalStream(cameraId) && valueee === "frame")
+        .filter((stream) => {
+          const { cameraId, userId, name } = stream;
+          let copy = cameraId.slice();
+          copy = copy.substr(15, copy.length+1)
+          const valueee = Session.get(copy)
+          return (VideoService.isLocalStream(cameraId) && valueee === "frame")
         })
         .map((stream) => {
           const { cameraId, userId, name } = stream;
@@ -378,6 +321,57 @@ class VideoList extends Component {
         });
   }
 
+
+  renderVideoList() {
+    const {
+      intl,
+      streams,
+      onMount,
+      swapLayout,
+    } = this.props;
+    const { focusedId } = this.state;
+
+    const numOfStreams = streams.length;
+    return streams.map((stream) => {
+      const { cameraId, userId, name } = stream;
+      const isFocused = focusedId === cameraId;
+      const isFocusedIntlKey = !isFocused ? 'focus' : 'unfocus';
+      let actions = [];
+
+      if (numOfStreams > 2) {
+        actions = [{
+          label: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Label`]),
+          description: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Desc`]),
+          onClick: () => this.handleVideoFocus(cameraId),
+        }];
+      }
+
+
+      return (
+        <div
+          key={cameraId}
+          className={cx({
+            [styles.videoListItem]: true,
+            [styles.focused]: focusedId === cameraId && numOfStreams > 2,
+          })}
+        >
+          <VideoListItemContainer
+            numOfStreams={numOfStreams}
+            cameraId={cameraId}
+            userId={userId}
+            name={name}
+            actions={actions}
+            onMount={(videoRef) => {
+              this.handleCanvasResize();
+              onMount(cameraId, videoRef);
+            }}
+            swapLayout={swapLayout}
+          />
+        </div>
+      );
+    });
+  }
+
   render() {
     const { streams, intl } = this.props;
     const { optimalGrid, autoplayBlocked } = this.state;
@@ -414,7 +408,6 @@ class VideoList extends Component {
             }}
           >
             {this.renderVideoList()}
-            {this.renderOwnVideo()}
           </div>
         )}
         { !autoplayBlocked ? null : (

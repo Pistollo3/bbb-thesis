@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import AnnotationHelpers from '../helpers';
 
 export default class RectangleDrawComponent extends Component {
+
   shouldComponentUpdate(nextProps) {
     return this.props.version !== nextProps.version;
   }

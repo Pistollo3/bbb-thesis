@@ -9,7 +9,8 @@ const humanizeSeconds = (time) => {
       return `0${x}`;
     }
     return x;
-  }).join(':');
+  },
+  ).join(':');
 };
 
 export default humanizeSeconds;

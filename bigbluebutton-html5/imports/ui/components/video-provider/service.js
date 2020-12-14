@@ -332,7 +332,6 @@ class VideoService {
 
   getConnectingStream(streams) {
     let connectingStream;
-    // logger.info("GET CONNECTING")
 
     if (this.isConnecting) {
       if (this.deviceId) {
@@ -487,9 +486,6 @@ class VideoService {
   }
 
   isLocalStream(cameraId) {
-    logger.info('AUTH USER ID')
-    logger.info(Auth.userID)
-    logger.info(cameraId)
     return cameraId.startsWith(Auth.userID);
   }
 

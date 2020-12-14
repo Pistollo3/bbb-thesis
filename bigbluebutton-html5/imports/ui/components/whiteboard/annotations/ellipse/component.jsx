@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import AnnotationHelpers from '../helpers';
 
 export default class EllipseDrawComponent extends Component {
+
   shouldComponentUpdate(nextProps) {
     return this.props.version !== nextProps.version;
   }
@@ -39,9 +40,7 @@ export default class EllipseDrawComponent extends Component {
   render() {
     const results = this.getCoordinates();
     const { annotation, slideWidth } = this.props;
-    const {
-      cx, cy, rx, ry,
-    } = results;
+    const { cx, cy, rx, ry } = results;
 
     return (
       <ellipse

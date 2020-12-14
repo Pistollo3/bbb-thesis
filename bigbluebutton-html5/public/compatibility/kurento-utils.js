@@ -467,7 +467,6 @@ function WebRtcPeer(mode, options, callback) {
                 constraints = MEDIA_CONSTRAINTS;
             }
             navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-
                 videoStream = stream;
                 start();
             }).catch(callback);

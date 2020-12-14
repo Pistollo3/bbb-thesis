@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import AnnotationHelpers from '../helpers';
 
 export default class LineDrawComponent extends Component {
+
   shouldComponentUpdate(nextProps) {
     return this.props.version !== nextProps.version;
   }
@@ -27,9 +28,7 @@ export default class LineDrawComponent extends Component {
   render() {
     const results = this.getCoordinates();
     const { annotation, slideWidth } = this.props;
-    const {
-      x1, y1, x2, y2,
-    } = results;
+    const { x1, y1, x2, y2 } = results;
 
     return (
       <line

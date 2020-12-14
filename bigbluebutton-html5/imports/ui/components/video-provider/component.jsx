@@ -1,15 +1,19 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import {defineMessages, injectIntl} from 'react-intl';
-import {styles} from './styles';
 import _ from 'lodash';
+import { defineMessages, injectIntl } from 'react-intl';
+import cx from 'classnames';
 import VideoService from './service';
 import VideoListContainer from './video-list/container';
-import {fetchWebRTCMappedStunTurnServers, getMappedFallbackStun,} from '/imports/utils/fetchStunTurnServers';
-import {tryGenerateIceCandidates} from '/imports/utils/safari-webrtc';
+import {
+  fetchWebRTCMappedStunTurnServers,
+  getMappedFallbackStun,
+} from '/imports/utils/fetchStunTurnServers';
+import { tryGenerateIceCandidates } from '/imports/utils/safari-webrtc';
 import logger from '/imports/startup/client/logger';
-import cx from "classnames";
+import { styles } from './styles.scss';
+/*eslint-disable*/
 
 // Default values and default empty object to be backwards compat with 2.2.
 // FIXME Remove hardcoded defaults 2.3.
@@ -21,6 +25,7 @@ const {
 } = Meteor.settings.public.kurento.cameraTimeouts || {};
 const CAMERA_QUALITY_THRESHOLDS_ENABLED = Meteor.settings.public.kurento.cameraQualityThresholds.enabled;
 const PING_INTERVAL = 15000;
+let canvas
 
 const intlClientErrors = defineMessages({
   permissionError: {
@@ -95,6 +100,9 @@ class VideoProvider extends Component {
 
     this.info = VideoService.getInfo();
 
+    canvas = document.createElement('canvas')
+    document.body.appendChild(canvas)
+
     // Set a valid bbb-webrtc-sfu application server socket in the settings
     this.ws = new ReconnectingWebSocket(
       VideoService.getAuthenticatedURL(),
@@ -120,7 +128,7 @@ class VideoProvider extends Component {
     this.debouncedConnectStreams = _.debounce(
       this.connectStreams,
       VideoService.getPageChangeDebounceTime(),
-      { leading: false, trailing: true },
+      { leading: false, trailing: true, }
     );
   }
 
@@ -132,6 +140,8 @@ class VideoProvider extends Component {
     window.addEventListener('offline', this.onWsClose);
 
     this.ws.onmessage = this.onWsMessage;
+
+    let video= document.getElementById('preview')
 
     window.addEventListener('beforeunload', this.onBeforeUnload);
   }
@@ -231,15 +241,15 @@ class VideoProvider extends Component {
     VideoService.onBeforeUnload();
   }
 
-  updateThreshold(numberOfPublishers) {
+  updateThreshold (numberOfPublishers) {
     const { threshold, profile } = VideoService.getThreshold(numberOfPublishers);
     if (profile) {
       const publishers = Object.values(this.webRtcPeers)
         .filter(peer => peer.isPublisher)
-        .forEach((peer) => {
+        .forEach(peer => {
           // 0 means no threshold in place. Reapply original one if needed
-          const profileToApply = (threshold === 0) ? peer.originalProfileId : profile;
-          VideoService.applyCameraProfile(peer, profileToApply);
+          let profileToApply = (threshold === 0) ? peer.originalProfileId : profile;
+          VideoService.applyCameraProfile(peer, profileToApply)
         });
     }
   }
@@ -248,9 +258,13 @@ class VideoProvider extends Component {
     const streamsCameraIds = streams.map(s => s.cameraId);
     const streamsConnected = Object.keys(this.webRtcPeers);
 
-    const streamsToConnect = streamsCameraIds.filter(cameraId => !streamsConnected.includes(cameraId));
+    const streamsToConnect = streamsCameraIds.filter(cameraId => {
+      return !streamsConnected.includes(cameraId);
+    });
 
-    const streamsToDisconnect = streamsConnected.filter(cameraId => !streamsCameraIds.includes(cameraId));
+    const streamsToDisconnect = streamsConnected.filter(cameraId => {
+      return !streamsCameraIds.includes(cameraId);
+    });
 
     return [streamsToConnect, streamsToDisconnect];
   }
@@ -269,10 +283,7 @@ class VideoProvider extends Component {
   updateStreams(streams, shouldDebounce = false) {
     const [streamsToConnect, streamsToDisconnect] = this.getStreamsToConnectAndDisconnect(streams);
 
-    // logger.info('STREAMS TO CONNECT')
-    // logger.info(streamsToConnect)
-
-    if (shouldDebounce) {
+    if(shouldDebounce) {
       this.debouncedConnectStreams(streamsToConnect);
     } else {
       this.connectStreams(streamsToConnect);
@@ -327,7 +338,6 @@ class VideoProvider extends Component {
   startResponse(message) {
     const { cameraId, role } = message;
     const peer = this.webRtcPeers[cameraId];
-
 
     logger.info({
       logCode: 'video_provider_start_response_success',
@@ -457,10 +467,10 @@ class VideoProvider extends Component {
 
   takePicture(){
     let video= document.getElementById('preview')
-    let canvas= document.getElementById('canvas')
+    //let canvas= new HTMLCanvasElement()
     let frameVideo= document.getElementById('frame')
     let context = canvas.getContext('2d');
-    let width = 320;    // We will scale the photo width to this
+    let width = 480;    // We will scale the photo width to this
     let height = 320;
 
     canvas.width = width;
@@ -490,153 +500,147 @@ class VideoProvider extends Component {
     copy = copy.substr(15, copy.length+1)
     const valueee = Session.get(copy)
 
+    logger.info(valueee)
 
-      logger.info('FRAMEEEEEE')
-      if (!isLocal) {
-        try {
-          await tryGenerateIceCandidates();
-        } catch (error) {
-          logger.error({
-            logCode: 'video_provider_no_valid_candidate_gum_failure',
-            extraInfo: {
-              errorName: error.name,
-              errorMessage: error.message,
-            },
-          }, `Forced gUM to release additional ICE candidates failed due to ${error.name}.`);
-        }
-      }
+
+
+    // WebRTC restrictions may need a capture device permission to release
+    // useful ICE candidates on recvonly/no-gUM peers
+    if (!isLocal) {
       try {
-        iceServers = await fetchWebRTCMappedStunTurnServers(this.info.sessionToken);
+        await tryGenerateIceCandidates();
       } catch (error) {
         logger.error({
-          logCode: 'video_provider_fetchstunturninfo_error',
+          logCode: 'video_provider_no_valid_candidate_gum_failure',
           extraInfo: {
-            errorCode: error.code,
+            errorName: error.name,
             errorMessage: error.message,
           },
-        }, 'video-provider failed to fetch STUN/TURN info, using default');
-        // Use fallback STUN server
-        iceServers = getMappedFallbackStun();
-      } finally {
-        const { constraints, bitrate, id: profileId } = VideoService.getCameraProfile();
-        this.outboundIceQueues[cameraId] = [];
+        }, `Forced gUM to release additional ICE candidates failed due to ${error.name}.`);
+      }
+    }
+
+    try {
+      iceServers = await fetchWebRTCMappedStunTurnServers(this.info.sessionToken);
+    } catch (error) {
+      logger.error({
+        logCode: 'video_provider_fetchstunturninfo_error',
+        extraInfo: {
+          errorCode: error.code,
+          errorMessage: error.message,
+        },
+      }, 'video-provider failed to fetch STUN/TURN info, using default');
+      // Use fallback STUN server
+      iceServers = getMappedFallbackStun();
+    } finally {
+      const { constraints, bitrate, id: profileId } = VideoService.getCameraProfile();
+      this.outboundIceQueues[cameraId] = [];
 
 
-        let video= document.getElementById('preview')
-        let canvas= document.getElementById('canvas')
-        let frameVideo= document.getElementById('frame')
-        let context = canvas.getContext('2d');
-        let width = 320;    // We will scale the photo width to this
-        let height = 320;
+      let video= document.getElementById('preview')
+      //let canvas= document.getElementById('canvas')
+      let frameVideo= document.getElementById('frame')
+      let context = canvas.getContext('2d');
+      let width = 320;    // We will scale the photo width to this
+      let height = 320;
 
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-        .then(function(stream) {
-          video.srcObject = stream;
-          video.play();
-        })
-
-        // canvas.width = width;
-        // canvas.height = height;
-        // context.drawImage(video, 0, 0, width, height);
-        //
-        // let data = canvas.toDataURL('image/png');
-        // photo.setAttribute('src', data);
+      navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+          .then(function(stream) {
+            video.srcObject = stream;
+            video.play();
+          })
 
 
-        if((valueee && valueee === 'frame')){
-          this.takePicture()
-          let canvasStream = canvas.captureStream()
-          frameVideo.srcObject = canvasStream
-        }
-        else{
-          frameVideo.srcObject = video.srcObject
-        }
+      if((valueee && valueee === 'frame')){
+        this.takePicture()
+        let canvasStream = canvas.captureStream()
+        frameVideo.srcObject = canvasStream
+      }
+      else{
+        frameVideo.srcObject = video.srcObject
+      }
 
-        let peerOptions = {
-          videoStream: frameVideo.srcObject,
+      var peerOptions = {
+        videoStream: frameVideo.srcObject,
+        onicecandidate: this._getOnIceCandidateCallback(cameraId, isLocal),
+      };
+
+      if (iceServers.length > 0) {
+        peerOptions.configuration = {};
+        peerOptions.configuration.iceServers = iceServers;
+      }
+
+      let WebRtcPeerObj;
+      if (isLocal) {
+        WebRtcPeerObj = window.kurentoUtils.WebRtcPeer.WebRtcPeerSendonly;
+      } else {
+        peerOptions = {
           onicecandidate: this._getOnIceCandidateCallback(cameraId, isLocal),
         };
+        WebRtcPeerObj = window.kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly;
+      }
 
-        if (iceServers.length > 0) {
-          peerOptions.configuration = {};
-          peerOptions.configuration.iceServers = iceServers;
+      this.webRtcPeers[cameraId] = new WebRtcPeerObj(peerOptions, (error) => {
+        const peer = this.webRtcPeers[cameraId];
+
+        peer.started = false;
+        peer.attached = false;
+        peer.didSDPAnswered = false;
+        peer.isPublisher = isLocal;
+        peer.originalProfileId = profileId;
+        peer.currentProfileId = profileId;
+
+        if (peer.inboundIceQueue == null) {
+          peer.inboundIceQueue = [];
         }
 
-        let WebRtcPeerObj;
-        if (isLocal) {
-          logger.info('LOCAAAAAAL')
-          WebRtcPeerObj = window.kurentoUtils.WebRtcPeer.WebRtcPeerSendonly;
-        } else {
-          logger.info('NOT LOCAAAAAAL')
-          WebRtcPeerObj = window.kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly;
-          peerOptions = {
-            onicecandidate: this._getOnIceCandidateCallback(cameraId, isLocal),
+        if (error) {
+          return this._onWebRTCError(error, cameraId, isLocal);
+        }
+
+        peer.generateOffer((errorGenOffer, offerSdp) => {
+          if (errorGenOffer) {
+            return this._onWebRTCError(errorGenOffer, cameraId, isLocal);
+          }
+
+          const message = {
+            id: 'start',
+            type: 'video',
+            cameraId,
+            role: VideoService.getRole(isLocal),
+            sdpOffer: offerSdp,
+            meetingId: this.info.meetingId,
+            voiceBridge: this.info.voiceBridge,
+            userId: this.info.userId,
+            userName: this.info.userName,
+            bitrate,
+            record: VideoService.getRecord(),
           };
-        }
 
-        this.webRtcPeers[cameraId] = new WebRtcPeerObj(peerOptions, (error) => {
-          const peer = this.webRtcPeers[cameraId];
-          // peer.videoStream =
+          logger.info({
+            logCode: 'video_provider_sfu_request_start_camera',
+            extraInfo: {
+              sfuRequest: message,
+              cameraProfile: profileId,
+            },
+          }, `Camera offer generated. Sending start request to SFU for ${cameraId}`);
 
+          this.sendMessage(message);
 
-
-          peer.started = false;
-          peer.attached = false;
-          peer.didSDPAnswered = false;
-          peer.isPublisher = isLocal;
-          peer.originalProfileId = profileId;
-          peer.currentProfileId = profileId;
-
-          if (peer.inboundIceQueue == null) {
-            peer.inboundIceQueue = [];
-          }
-
-          if (error) {
-            return this._onWebRTCError(error, cameraId, isLocal);
-          }
-
-          peer.generateOffer((errorGenOffer, offerSdp) => {
-            if (errorGenOffer) {
-              return this._onWebRTCError(errorGenOffer, cameraId, isLocal);
-            }
-
-            const message = {
-              id: 'start',
-              type: 'video',
-              cameraId,
-              role: VideoService.getRole(isLocal),
-              sdpOffer: offerSdp,
-              meetingId: this.info.meetingId,
-              voiceBridge: this.info.voiceBridge,
-              userId: this.info.userId,
-              userName: this.info.userName,
-              bitrate,
-              record: VideoService.getRecord(),
-            };
-
-            logger.info({
-              logCode: 'video_provider_sfu_request_start_camera',
-              extraInfo: {
-                sfuRequest: message,
-                cameraProfile: profileId,
-              },
-            }, `Camera offer generated. Sending start request to SFU for ${cameraId}`);
-
-            this.sendMessage(message);
-
-            return false;
-          });
           return false;
         });
+        return false;
+      });
 
-        const peer = this.webRtcPeers[cameraId];
-        if (peer && peer.peerConnection) {
-          const conn = peer.peerConnection;
-          conn.oniceconnectionstatechange = this._getOnIceConnectionStateChangeCallback(cameraId, isLocal);
-          VideoService.monitor(conn);
-        }
+      const peer = this.webRtcPeers[cameraId];
+      if (peer && peer.peerConnection) {
+        const conn = peer.peerConnection;
+        conn.oniceconnectionstatechange = this._getOnIceConnectionStateChangeCallback(cameraId, isLocal);
+        VideoService.monitor(conn);
       }
+    }
   }
+
 
   _getWebRTCStartTimeout(cameraId, isLocal) {
     const { intl } = this.props;
@@ -741,7 +745,7 @@ class VideoProvider extends Component {
 
       this.restartTimeout[cameraId] = setTimeout(
         this._getWebRTCStartTimeout(cameraId, isLocal),
-        this.restartTimer[cameraId],
+        this.restartTimer[cameraId]
       );
     }
   }
@@ -843,11 +847,9 @@ class VideoProvider extends Component {
 
     const attachVideoStreamHelper = () => {
       const stream = isLocal ? peer.getLocalStream() : peer.getRemoteStream();
-
       video.pause();
       video.srcObject = stream;
       video.load();
-      logger.info('VIDEO LOADED!!!')
 
       peer.attached = true;
       delete this.videoTags[cameraId];
@@ -946,28 +948,30 @@ class VideoProvider extends Component {
     const { swapLayout, currentVideoPageIndex, streams } = this.props;
 
     return (
-      <div>
-        <VideoListContainer
-          streams={streams}
-          onMount={this.createVideoTag}
-          swapLayout={swapLayout}
-          currentVideoPageIndex={currentVideoPageIndex}
-        />
-        <canvas
-            id="canvas"
-        />
-        <video
-            id="preview"
-            autoPlay
-            playsInline
-            muted
-        />
-       <video
-            id="frame"
-            autoPlay
-            playsInline
-            muted
-        />
+        <div>
+          <VideoListContainer
+            streams={streams}
+            onMount={this.createVideoTag}
+            swapLayout={swapLayout}
+            currentVideoPageIndex={currentVideoPageIndex}
+          />
+          <video
+              id="frame"
+              className={styles.hidden}
+              muted
+              autoPlay
+              playsInline
+          />
+          <canvas
+              id="canvas"
+          />
+          <video
+              id="preview"
+              className={styles.hidden}
+              autoPlay
+              playsInline
+              muted
+          />
       </div>
     );
   }

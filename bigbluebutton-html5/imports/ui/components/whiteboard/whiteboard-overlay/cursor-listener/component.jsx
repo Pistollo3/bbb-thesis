@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { throttle } from 'lodash';
 import PropTypes from 'prop-types';
-import logger from '/imports/startup/client/logger';
-/* eslint-disable */
 
 // maximum value of z-index to prevent other things from overlapping
 const MAX_Z_INDEX = (2 ** 31) - 1;
@@ -119,7 +117,6 @@ export default class CursorListener extends Component {
   }
 
   handleMouseMove(event) {
-    //logger.info('QUIII');
     if (this.touchStarted) {
       return;
     }

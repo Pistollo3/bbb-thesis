@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import AnnotationHelpers from '../helpers';
 
 export default class TriangleDrawComponent extends Component {
+
   shouldComponentUpdate(nextProps) {
     return this.props.version !== nextProps.version;
   }
@@ -21,12 +22,12 @@ export default class TriangleDrawComponent extends Component {
     const yTop = points[1];
 
     const path = `M${(xTop / 100) * slideWidth
-    },${(yTop / 100) * slideHeight
-    },${(xBottomLeft / 100) * slideWidth
-    },${(yBottomLeft / 100) * slideHeight
-    },${(xBottomRight / 100) * slideWidth
-    },${(yBottomRight / 100) * slideHeight
-    }Z`;
+        },${(yTop / 100) * slideHeight
+        },${(xBottomLeft / 100) * slideWidth
+        },${(yBottomLeft / 100) * slideHeight
+        },${(xBottomRight / 100) * slideWidth
+        },${(yBottomRight / 100) * slideHeight
+        }Z`;
 
     return path;
   }

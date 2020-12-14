@@ -10,7 +10,9 @@ import ReactPlayer from 'react-player';
 
 import Panopto from './custom-players/panopto';
 
-const isUrlValid = url => ReactPlayer.canPlay(url) || Panopto.canPlay(url);
+const isUrlValid = (url) => {
+  return ReactPlayer.canPlay(url) || Panopto.canPlay(url);
+}
 
 const startWatching = (url) => {
   let externalVideoUrl = url;

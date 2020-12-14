@@ -99,9 +99,6 @@ class VideoListItem extends Component {
     const { videoIsReady } = this.state;
     if (!videoIsReady) this.setState({ videoIsReady: true });
     window.dispatchEvent(new Event('resize'));
-
-    logger.info('VIDEO IS READY??')
-    logger.info(videoIsReady)
   }
 
   getAvailableActions() {

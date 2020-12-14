@@ -66,7 +66,7 @@ const shareScreen = (onFail) => {
     stopWatching();
   }
 
-  BridgeService.getScreenStream().then((stream) => {
+  BridgeService.getScreenStream().then(stream => {
     KurentoBridge.kurentoShareScreen(onFail, stream);
   }).catch(onFail);
 };

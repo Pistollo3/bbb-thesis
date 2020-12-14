@@ -19,6 +19,8 @@ import { styles } from '../styles';
 import { withDraggableConsumer } from '/imports/ui/components/media/webcam-draggable-overlay/context';
 import VideoService from '../../service';
 
+/*eslint-disable*/
+
 const ALLOW_FULLSCREEN = Meteor.settings.public.app.allowFullscreen;
 
 class VideoListFrame extends Component {
@@ -41,11 +43,14 @@ class VideoListFrame extends Component {
     const { onMount, webcamDraggableDispatch } = this.props;
 
     webcamDraggableDispatch(
-      {
-        type: 'setVideoRef',
-        value: this.videoTag,
-      },
+        {
+          type: 'setVideoRef',
+          value: this.videoTag,
+        },
     );
+
+
+    //this.takePicture()
 
     //onMount(this.videoTag);
 
@@ -73,7 +78,6 @@ class VideoListFrame extends Component {
     //   playElement(this.videoTag);
     // }
 
-    this.takePicture()
 
 
   }
@@ -92,7 +96,7 @@ class VideoListFrame extends Component {
     let self = this;
     setTimeout(function() {
       self.takePicture();
-    }, 10000);
+    }, 3000);
   }
 
   componentWillUnmount() {
@@ -108,10 +112,10 @@ class VideoListFrame extends Component {
     if (isFullscreen !== serviceIsFullscreen) {
       this.setState({ isFullscreen: serviceIsFullscreen });
       webcamDraggableDispatch(
-        {
-          type: 'setIsCameraFullscreen',
-          value: serviceIsFullscreen,
-        },
+          {
+            type: 'setIsCameraFullscreen',
+            value: serviceIsFullscreen,
+          },
       );
     }
   }
@@ -143,12 +147,12 @@ class VideoListFrame extends Component {
     if (!ALLOW_FULLSCREEN) return null;
 
     return (
-      <FullscreenButtonContainer
-        fullscreenRef={this.videoContainer}
-        elementName={name}
-        isFullscreen={isFullscreen}
-        dark
-      />
+        <FullscreenButtonContainer
+            fullscreenRef={this.videoContainer}
+            elementName={name}
+            isFullscreen={isFullscreen}
+            dark
+        />
     );
   }
 
@@ -180,25 +184,25 @@ class VideoListFrame extends Component {
 
 
     return (
-      <div>
-        <video
-            id="preview3"
-            className={styles.support}
-            autoPlay
-            playsInline
-            muted
-        />
-        <video
-            id="ownVideo"
-            className={styles.support}
-            autoPlay
-            playsInline
-            muted
-        />
-        <canvas
-            id="canvas3"
-        />
-      </div>
+        <div>
+          <video
+              id="preview3"
+              className={styles.support}
+              autoPlay
+              playsInline
+              muted
+          />
+          <video
+              id="ownVideo"
+              className={styles.support}
+              autoPlay
+              playsInline
+              muted
+          />
+          <canvas
+              id="canvas3"
+          />
+        </div>
     );
   }
 }

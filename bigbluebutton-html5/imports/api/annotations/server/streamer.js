@@ -14,7 +14,9 @@ export function addAnnotationsStreamer(meetingId) {
     return this.userId && this.userId.includes(meetingId);
   });
 
-  streamer.allowWrite(() => false);
+  streamer.allowWrite(function allowWrite() {
+    return false;
+  });
 }
 
 export default function get(meetingId) {

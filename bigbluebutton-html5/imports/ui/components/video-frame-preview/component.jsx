@@ -227,62 +227,6 @@ class VideoFramePreview extends Component {
 
     this.mirrorOwnWebcam = VideoService.mirrorOwnWebcam();
     this.userParameterProfile = VideoService.getUserParameterProfile();
-    // let video = document.getElementById('preview');
-    // video.addEventListener('play', function(){
-    //   this.takePicture();
-    // },false);
-  }
-
-  takePicture() {
-    const {
-      webcamDeviceId
-    } = this.props;
-    let canvas : HTMLCanvasElement = document.getElementById('canvas1');
-    if(canvas == null)
-      return;
-    let video = document.getElementById('preview1');
-    let video2 = document.getElementById('frame1');
-    let photo = document.getElementById('photo1');
-    let context = canvas.getContext('2d');
-    let width = 320;    // We will scale the photo width to this
-    let height = 320;
-
-    if (width && height) {
-      canvas.width = width;
-      canvas.height = height;
-      context.drawImage(video, 0, 0, width, height);
-
-      var data = canvas.toDataURL('image/jpeg');
-      photo.setAttribute('src', data);
-      var videoStream = canvas.captureStream()
-      video2.srcObject = videoStream
-      Session.set(webcamDeviceId, "frame")
-      // logger.info('CAMERA IDDDD')
-      // logger.info(webcamDeviceId)
-      // var mediaRecorder = new MediaRecorder(videoStream);
-      // var chunks = [];
-      // mediaRecorder.ondataavailable = function(e) {
-      //   chunks.push(e.data);
-      // };
-      //
-      // mediaRecorder.onstop = function(e) {
-      //   var blob = new Blob(chunks, { 'type' : 'video/mp4' }); // other types are available such as 'video/webm' for instance, see the doc for more info
-      //   chunks = [];
-      //   var videoURL = URL.createObjectURL(blob);
-      //   video2.src = videoURL;
-      // };
-      // mediaRecorder.start()
-      // setTimeout(function (){ mediaRecorder.stop(); }, 5000);
-
-
-    } else {
-      //clearphoto();
-    }
-    let self = this;
-
-    setTimeout(function() {
-      self.takePicture();
-    }, 3000);
   }
 
   componentDidMount() {
@@ -293,7 +237,6 @@ class VideoFramePreview extends Component {
     } = this.props;
 
     this._isMounted = true;
-
 
     // Have to request any device to get past checks before finding devices. If this is
     // skipped then we get devices with no labels
@@ -397,7 +340,6 @@ class VideoFramePreview extends Component {
     } else {
       // TODO: Add an error message when media is globablly disabled
     }
-
   }
 
   componentWillUnmount() {
@@ -504,10 +446,18 @@ class VideoFramePreview extends Component {
     return navigator.mediaDevices.getUserMedia(constraints);
   }
 
+  takePicture() {
+    const {
+      webcamDeviceId
+    } = this.props;
+    Session.set(webcamDeviceId, "frame")
+  }
+
   displayPreview(deviceId, profile) {
     const {
       changeProfile,
       skipVideoPreview,
+        webcamDeviceId
     } = this.props;
 
     this.setState({
@@ -526,7 +476,8 @@ class VideoFramePreview extends Component {
       });
       this.video.srcObject = stream;
       this.deviceStream = stream;
-      this.takePicture();
+      logger.info('AOAOAOAOAOAOAOAOAOAOAOAOAOAOAOA')
+      this.takePicture()
     }).catch((error) => {
       logger.warn({
         logCode: 'video_preview_do_gum_preview_error',
@@ -683,8 +634,11 @@ class VideoFramePreview extends Component {
                 )
                 : (
                   <video
-                    id="frame1"
-                    className={styles.canvas}
+                    id="preview"
+                    className={cx({
+                      [styles.preview]: true,
+                      [styles.mirroredVideo]: this.mirrorOwnWebcam,
+                    })}
                     ref={(ref) => { this.video = ref; }}
                     autoPlay
                     playsInline
@@ -693,23 +647,6 @@ class VideoFramePreview extends Component {
                 )
             }
             </div>
-            <canvas
-              id="canvas1"
-            />
-            <div className="output">
-              <img id="photo1" className={styles.canvas} alt="The screen capture will appear in this box." />
-            </div>
-            <video
-                id="preview1"
-                className={cx({
-                  [styles.preview]: true,
-                  [styles.mirroredVideo]: this.mirrorOwnWebcam,
-                })}
-                ref={(ref) => { this.video = ref; }}
-                autoPlay
-                playsInline
-                muted
-            />
             {this.renderDeviceSelectors()}
           </div>
         );

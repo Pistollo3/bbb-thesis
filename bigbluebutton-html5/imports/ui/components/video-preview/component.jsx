@@ -9,10 +9,11 @@ import logger from '/imports/startup/client/logger';
 import Modal from '/imports/ui/components/modal/simple/component';
 import browser from 'browser-detect';
 import cx from 'classnames';
+import { Session } from 'meteor/session';
 import VideoService from '../video-provider/service';
 import { styles } from './styles';
-import {Session} from "meteor/session";
-/* eslint-disable */
+
+/*eslint-disable*/
 
 const CAMERA_PROFILES = Meteor.settings.public.kurento.cameraProfiles;
 
@@ -227,38 +228,6 @@ class VideoPreview extends Component {
 
     this.mirrorOwnWebcam = VideoService.mirrorOwnWebcam();
     this.userParameterProfile = VideoService.getUserParameterProfile();
-    // let video = document.getElementById('preview');
-    // video.addEventListener('play', function(){
-    //   this.takePicture();
-    // },false);
-  }
-
-  takePicture() {
-    logger.info('TAKE');
-    let canvas = document.getElementById('canvas');
-    if(canvas == null)
-      return;
-    let video = document.getElementById('preview');
-    let photo = document.getElementById('photo');
-    let context = canvas.getContext('2d');
-    let streaming = false;
-    let width = 320;    // We will scale the photo width to this
-    let height = 320;
-
-    if (width && height) {
-      canvas.width = width;
-      canvas.height = height;
-      context.drawImage(video, 0, 0, width, height);
-
-      var data = canvas.toDataURL('image/png');
-      photo.setAttribute('src', data);
-    } else {
-      //clearphoto();
-    }
-    let self = this;
-    setTimeout(function() {
-      self.takePicture();
-    }, 1000);
   }
 
   componentDidMount() {
@@ -269,7 +238,6 @@ class VideoPreview extends Component {
     } = this.props;
 
     this._isMounted = true;
-
 
     // Have to request any device to get past checks before finding devices. If this is
     // skipped then we get devices with no labels
@@ -373,7 +341,6 @@ class VideoPreview extends Component {
     } else {
       // TODO: Add an error message when media is globablly disabled
     }
-
   }
 
   componentWillUnmount() {
@@ -418,7 +385,7 @@ class VideoPreview extends Component {
   handleStartSharing() {
     const { resolve, startSharing } = this.props;
     const { webcamDeviceId } = this.state;
-    Session.set(webcamDeviceId, "video")
+    //Session.set(webcamDeviceId, "video")
     this.stopTracks();
     startSharing(webcamDeviceId);
     if (resolve) resolve();
@@ -503,7 +470,6 @@ class VideoPreview extends Component {
       });
       this.video.srcObject = stream;
       this.deviceStream = stream;
-      //this.takePicture();
     }).catch((error) => {
       logger.warn({
         logCode: 'video_preview_do_gum_preview_error',

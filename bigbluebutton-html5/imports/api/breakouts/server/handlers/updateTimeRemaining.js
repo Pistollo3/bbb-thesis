@@ -29,8 +29,8 @@ export default function handleUpdateTimeRemaining({ body }, meetingId) {
       return Logger.error(`Updating breakouts: ${err}`);
     }
 
-    return Logger.info('Updated breakout time remaining for breakouts '
-      + `where parentMeetingId=${meetingId}`);
+    return Logger.info('Updated breakout time remaining for breakouts ' +
+      `where parentMeetingId=${meetingId}`);
   };
 
   return Breakouts.update(selector, modifier, options, cb);
