@@ -15,9 +15,11 @@ import Icon from '/imports/ui/components/icon/component';
 import logger from '/imports/startup/client/logger';
 import FullscreenService from '/imports/ui/components/fullscreen-button/service';
 import FullscreenButtonContainer from '/imports/ui/components/fullscreen-button/container';
+import HideButtonContainer from "/imports/ui/components/hide-button/container";
 import { styles } from '../styles';
 import { withDraggableConsumer } from '/imports/ui/components/media/webcam-draggable-overlay/context';
 import VideoService from '../../service';
+/*eslint-disable*/
 
 const ALLOW_FULLSCREEN = Meteor.settings.public.app.allowFullscreen;
 
@@ -29,12 +31,33 @@ class VideoListItem extends Component {
     this.state = {
       videoIsReady: false,
       isFullscreen: false,
+      isReduced: false,
     };
+
+    this.setIsReduced = this.setIsReduced.bind(this)
+    this.showVideo = this.showVideo.bind(this)
 
     this.mirrorOwnWebcam = VideoService.mirrorOwnWebcam(props.userId);
 
     this.setVideoIsReady = this.setVideoIsReady.bind(this);
     this.onFullscreenChange = this.onFullscreenChange.bind(this);
+  }
+
+  setIsReduced(){
+    logger.info('IS RED')
+    // this.setState({
+    //   isReduced: true
+    // })
+    const { cameraId } = this.props
+    const streamRemovedEvent = new CustomEvent('streamRemoved', { detail: { mediaElement: cameraId } });
+    window.dispatchEvent(streamRemovedEvent);
+  }
+
+  showVideo(){
+    logger.info('QUAAAA')
+    this.setState({
+      isReduced: false
+    })
   }
 
   componentDidMount() {
@@ -51,6 +74,7 @@ class VideoListItem extends Component {
 
     this.videoTag.addEventListener('loadeddata', this.setVideoIsReady);
     this.videoContainer.addEventListener('fullscreenchange', this.onFullscreenChange);
+    this.videoContainer.addEventListener('notReduced', this.showVideo)
   }
 
   componentDidUpdate() {
@@ -118,6 +142,7 @@ class VideoListItem extends Component {
   renderFullscreenButton() {
     const { name } = this.props;
     const { isFullscreen } = this.state;
+    const { cameraId } = this.props;
 
     if (!ALLOW_FULLSCREEN) return null;
 
@@ -126,8 +151,27 @@ class VideoListItem extends Component {
         fullscreenRef={this.videoContainer}
         elementName={name}
         isFullscreen={isFullscreen}
+        cameraId={cameraId}
         dark
       />
+    );
+  }
+
+  renderHideButton() {
+    const { name } = this.props;
+    const { isFullscreen } = this.state;
+    const { isReduced } = this.state;
+
+    if (!ALLOW_FULLSCREEN) return null;
+
+    return (
+        <HideButtonContainer
+            fullscreenRef={this.videoContainer}
+            elementName={name}
+            isFullscreen={isFullscreen}
+            reducer={this.setIsReduced}
+            dark
+        />
     );
   }
 
@@ -135,6 +179,7 @@ class VideoListItem extends Component {
     const {
       videoIsReady,
       isFullscreen,
+      isReduced,
     } = this.state;
     const {
       name,
@@ -148,6 +193,7 @@ class VideoListItem extends Component {
 
     const result = browser();
     const isFirefox = (result && result.name) ? result.name.includes('firefox') : false;
+
 
     return (
       <div className={cx({
@@ -180,6 +226,7 @@ class VideoListItem extends Component {
             playsInline
           />
           {videoIsReady && this.renderFullscreenButton()}
+          {videoIsReady && this.renderHideButton()}
         </div>
         { videoIsReady &&
           <div className={styles.info}>

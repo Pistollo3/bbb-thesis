@@ -9,6 +9,7 @@ import { withDraggableContext } from './context';
 import VideoProviderContainer from '/imports/ui/components/video-provider/container';
 import { styles } from '../styles.scss';
 import Storage from '../../../services/storage/session';
+/*eslint-disable*/
 
 const { webcamsDefaultPlacement } = Meteor.settings.public.layout;
 const BROWSER_ISMOBILE = browser().mobile;
@@ -385,6 +386,7 @@ class WebcamDraggable extends Component {
                 ? (
                   <VideoProviderContainer
                     swapLayout={swapLayout}
+                    active={this.props.active}
                   />
                 )
                 : null

@@ -2,7 +2,7 @@ import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { injectIntl } from 'react-intl';
 import { withModalMounter } from '/imports/ui/components/modal/service';
-import VideoFramePreviewContainer from '/imports/ui/components/video-frame-preview/container';
+import VideoPreviewContainer from '/imports/ui/components/video-preview/container';
 import JoinVideoButton from './component';
 import VideoService from '../service';
 
@@ -15,7 +15,7 @@ const JoinVideoOptionsContainer = (props) => {
     ...restProps
   } = props;
 
-  const mountVideoPreview = () => { mountModal(<VideoFramePreviewContainer fromInterface />); };
+  const mountVideoPreview = () => { mountModal(<VideoPreviewContainer fromInterface />); };
 
   return (
     <JoinVideoButton {...{

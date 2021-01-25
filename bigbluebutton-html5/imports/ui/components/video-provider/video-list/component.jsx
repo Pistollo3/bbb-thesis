@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 import cx from 'classnames';
-import _ from 'lodash';
+import _, {throttle} from 'lodash';
 import { styles } from './styles';
 import VideoListItemContainer from './video-list-item/container';
 import { withDraggableConsumer } from '../../media/webcam-draggable-overlay/context';
@@ -87,6 +87,8 @@ class VideoList extends Component {
         filledArea: 0,
       },
       autoplayBlocked: false,
+      shownStreams: [],
+      removedStreams: [],
     };
 
     this.ticking = false;
@@ -102,6 +104,12 @@ class VideoList extends Component {
     this.handleAllowAutoplay = this.handleAllowAutoplay.bind(this);
     this.handlePlayElementFailed = this.handlePlayElementFailed.bind(this);
     this.autoplayWasHandled = false;
+
+    this.handleStreamRemoved = throttle(this.handleStreamRemoved).bind(this);
+    this.handleStreamShown = throttle(this.handleStreamShown).bind(this);
+    this.handleStream = throttle(this.handleStream).bind(this);
+
+
   }
 
   componentDidMount() {
@@ -116,11 +124,117 @@ class VideoList extends Component {
     this.handleCanvasResize();
     window.addEventListener('resize', this.handleCanvasResize, false);
     window.addEventListener('videoPlayFailed', this.handlePlayElementFailed);
+    window.addEventListener('streamRemoved', this.handleStreamRemoved);
+    window.addEventListener('streamShown', this.handleStreamShown);
+    window.addEventListener('handleStream', this.handleStream);
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleCanvasResize, false);
     window.removeEventListener('videoPlayFailed', this.handlePlayElementFailed);
+    window.removeEventListener('resize', this.handleStreamRemoved, false);
+    window.removeEventListener('resize', this.handleStreamShown, false);
+    window.removeEventListener('resize', this.handleStream, false);
+  }
+
+  handleStream(e){
+    logger.info('HANDLE STREAM')
+
+    const { mediaElement } = e.detail;
+    const { removedStreams, shownStreams } = this.state
+
+    e.stopPropagation();
+
+    let rStreams = removedStreams
+    let sStreams = shownStreams
+    let foundInRemoved = false
+
+    rStreams.forEach(s => {
+      if(s.toString().startsWith(mediaElement.toString())){
+        let index = rStreams.indexOf(s)
+        rStreams.splice(index,1)
+
+        sStreams.push(s)
+
+        logger.info(sStreams)
+        logger.info(rStreams)
+
+        foundInRemoved= true
+      }
+    })
+
+    if(!foundInRemoved){
+      sStreams.forEach(s => {
+        if(s.toString().startsWith(mediaElement.toString())){
+          let index = sStreams.indexOf(s)
+          sStreams.splice(index,1)
+
+          rStreams.push(s)
+
+          logger.info(sStreams)
+          logger.info(rStreams)
+        }
+      })
+    }
+
+    this.setState({
+      removedStreams: rStreams,
+      shownStreams: sStreams
+    }, () =>{
+      const { removedStreams, shownStreams } = this.state
+      logger.info(shownStreams)
+      logger.info(removedStreams)
+    })
+
+
+
+  }
+
+  handleStreamRemoved(e) {
+    logger.info('HANDLE STREAM REMOVED')
+
+    const { mediaElement } = e.detail;
+    const { removedStreams, shownStreams } = this.state
+
+    e.stopPropagation();
+
+    let rStreams = removedStreams
+    rStreams.push(mediaElement)
+    logger.info(rStreams)
+
+    let sStreams = shownStreams
+    let index = shownStreams.indexOf(mediaElement)
+    if (index > -1) {
+      sStreams.splice(index, 1);
+    }
+
+    this.setState({
+      removedStreams: rStreams,
+      shownStreams: sStreams
+    })
+  }
+
+  handleStreamShown(e){
+    logger.info('HANDLE STREAM SHOWN')
+
+    const { mediaElement } = e.detail;
+    const { removedStreams, shownStreams } = this.state
+
+    e.stopPropagation();
+
+    let sStreams = shownStreams
+    sStreams.push(mediaElement)
+
+    let rStreams = removedStreams
+    let index = rStreams.indexOf(mediaElement)
+    if (index > -1) {
+      rStreams.splice(index, 1);
+    }
+
+    this.setState({
+      removedStreams: rStreams,
+      shownStreams: sStreams
+    })
   }
 
   setOptimalGrid() {
@@ -294,8 +408,6 @@ class VideoList extends Component {
             }];
           }
 
-          logger.info('RENDERING OWN VIDEO')
-
           return (
               <div
                   key={cameraId}
@@ -329,10 +441,24 @@ class VideoList extends Component {
       onMount,
       swapLayout,
     } = this.props;
-    const { focusedId } = this.state;
+    const { focusedId, removedStreams, shownStreams } = this.state;
 
     const numOfStreams = streams.length;
-    return streams.map((stream) => {
+
+    logger.info('RENDER VIDEO LIST')
+    logger.info(shownStreams)
+    logger.info(removedStreams)
+
+    return streams.filter(s=> {
+      const { cameraId, userId, name } = s;
+      let shouldBeSeen = true
+      removedStreams.forEach(ss=>{
+        if(cameraId.toString() === ss.toString()){
+          shouldBeSeen = false
+        }
+      })
+      return shouldBeSeen
+    }).map((stream) => {
       const { cameraId, userId, name } = stream;
       const isFocused = focusedId === cameraId;
       const isFocusedIntlKey = !isFocused ? 'focus' : 'unfocus';

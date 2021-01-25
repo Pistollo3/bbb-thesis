@@ -5,6 +5,8 @@ import Settings from '/imports/ui/services/settings';
 import WebcamDraggable from './webcam-draggable-overlay/component';
 
 import { styles } from './styles';
+import logger from "../../../startup/client/logger";
+/*eslint-disable*/
 
 const propTypes = {
   children: PropTypes.element.isRequired,
@@ -31,10 +33,24 @@ export default class Media extends Component {
   constructor(props) {
     super(props);
     this.refContainer = React.createRef();
+    this.state = {
+      activeUsers: [],
+      inactiveUsers: [],
+    }
   }
 
   componentWillUpdate() {
     window.dispatchEvent(new Event('resize'));
+  }
+
+  addUserToActive(stream){
+    let c = this.state.activeUsers
+    c.push(stream)
+
+    this.setState({
+      activeUsers: c,
+      inactiveUsers: c,
+    })
   }
 
   render() {
@@ -52,6 +68,7 @@ export default class Media extends Component {
     const contentClassName = cx({
       [styles.content]: true,
     });
+
 
     const overlayClassName = cx({
       [styles.overlay]: true,
@@ -88,6 +105,9 @@ export default class Media extends Component {
             disableVideo={disableVideo}
             audioModalIsOpen={audioModalIsOpen}
             usersVideo={usersVideo}
+            handlerAddUser={this.addUserToActive.bind()}
+            active={this.state.activeUsers}
+
           />
         ) : null}
       </div>

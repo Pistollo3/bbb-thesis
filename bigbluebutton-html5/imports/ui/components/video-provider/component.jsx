@@ -273,11 +273,19 @@ class VideoProvider extends Component {
     streamsToConnect.forEach((cameraId) => {
       const isLocal = VideoService.isLocalStream(cameraId);
       this.createWebRTCPeer(cameraId, isLocal);
+
+      const handleStreamEvent = new CustomEvent('streamShown', { detail: { mediaElement: cameraId } });
+      window.dispatchEvent(handleStreamEvent);
     });
   }
 
   disconnectStreams(streamsToDisconnect) {
-    streamsToDisconnect.forEach(cameraId => this.stopWebRTCPeer(cameraId));
+    streamsToDisconnect.forEach(cameraId => {
+      this.stopWebRTCPeer(cameraId)
+
+      const handleStreamEvent = new CustomEvent('streamShown', { detail: { mediaElement: cameraId } });
+      window.dispatchEvent(handleStreamEvent);
+    });
   }
 
   updateStreams(streams, shouldDebounce = false) {

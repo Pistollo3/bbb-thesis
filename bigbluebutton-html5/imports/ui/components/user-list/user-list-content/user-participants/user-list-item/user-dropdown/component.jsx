@@ -13,11 +13,13 @@ import DropdownListSeparator from '/imports/ui/components/dropdown/list/separato
 import lockContextContainer from '/imports/ui/components/lock-viewers/context/container';
 import { withModalMounter } from '/imports/ui/components/modal/service';
 import RemoveUserModal from '/imports/ui/components/modal/remove-user/component';
-import _ from 'lodash';
+import _, {throttle} from 'lodash';
 import { Session } from 'meteor/session';
 import { styles } from './styles';
 import UserName from '../user-name/component';
 import UserIcons from '../user-icons/component';
+import logger from "../../../../../../../startup/client/logger";
+/*eslint-disable*/
 
 const messages = defineMessages({
   presenter: {
@@ -153,6 +155,8 @@ class UserDropdown extends PureComponent {
       dropdownDirection: 'top',
       dropdownVisible: false,
       showNestedOptions: false,
+      shownStreams: [],
+      removedStreams: [],
     };
 
     this.handleScroll = this.handleScroll.bind(this);
@@ -162,6 +166,10 @@ class UserDropdown extends PureComponent {
     this.renderUserAvatar = this.renderUserAvatar.bind(this);
     this.resetMenuState = this.resetMenuState.bind(this);
     this.makeDropdownItem = this.makeDropdownItem.bind(this);
+
+    this.handleStreamRemoved = throttle(this.handleStreamRemoved).bind(this);
+    this.handleStreamShown = throttle(this.handleStreamShown).bind(this);
+    this.handleStream = throttle(this.handleStream).bind(this);
   }
 
   componentWillMount() {
@@ -169,8 +177,125 @@ class UserDropdown extends PureComponent {
     this.seperator = _.uniqueId('action-separator-');
   }
 
+  componentDidMount() {
+    window.addEventListener('streamRemoved', this.handleStreamRemoved);
+    window.addEventListener('streamShown', this.handleStreamShown);
+    window.addEventListener('handleStream', this.handleStream);
+  }
+
   componentDidUpdate() {
     this.checkDropdownDirection();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleStreamRemoved, false);
+    window.removeEventListener('resize', this.handleStreamShown, false);
+    window.removeEventListener('resize', this.handleStream, false);
+  }
+
+  handleStream(e){
+    logger.info('HANDLE STREAM DROPDOWN')
+
+    const { mediaElement } = e.detail;
+    const { removedStreams, shownStreams } = this.state
+
+    e.stopPropagation();
+
+    let rStreams = removedStreams
+    let sStreams = shownStreams
+    let foundInRemoved = false
+
+    rStreams.forEach(s => {
+      if(s.toString().startsWith(mediaElement.toString())){
+        let index = rStreams.indexOf(s)
+        rStreams.splice(index,1)
+
+        sStreams.push(s)
+
+        logger.info(sStreams)
+        logger.info(rStreams)
+
+        foundInRemoved= true
+      }
+    })
+
+    if(!foundInRemoved){
+      let foundInShown = false
+      sStreams.forEach(s => {
+        if(s.toString().startsWith(mediaElement.toString())){
+          foundInShown = true
+          let index = sStreams.indexOf(s)
+          sStreams.splice(index,1)
+
+          rStreams.push(s)
+
+          logger.info(sStreams)
+          logger.info(rStreams)
+        }
+      })
+      if(!foundInShown){
+        rStreams.push(mediaElement)
+      }
+    }
+
+    this.setState({
+      removedStreams: rStreams,
+      shownStreams: sStreams
+    }, () =>{
+      const { removedStreams, shownStreams } = this.state
+      logger.info(shownStreams)
+      logger.info(removedStreams)
+    })
+
+
+
+  }
+
+  handleStreamRemoved(e) {
+    logger.info('HANDLE STREAM REMOVED')
+
+    const { mediaElement } = e.detail;
+    const { removedStreams, shownStreams } = this.state
+
+    e.stopPropagation();
+
+    let rStreams = removedStreams
+    rStreams.push(mediaElement)
+    logger.info(rStreams)
+
+    let sStreams = shownStreams
+    let index = shownStreams.indexOf(mediaElement)
+    if (index > -1) {
+      sStreams.splice(index, 1);
+    }
+
+    this.setState({
+      removedStreams: rStreams,
+      shownStreams: sStreams
+    })
+  }
+
+  handleStreamShown(e){
+    logger.info('HANDLE STREAM SHOWN')
+
+    const { mediaElement } = e.detail;
+    const { removedStreams, shownStreams } = this.state
+
+    e.stopPropagation();
+
+    let sStreams = shownStreams
+    sStreams.push(mediaElement)
+
+    let rStreams = removedStreams
+    let index = rStreams.indexOf(mediaElement)
+    if (index > -1) {
+      rStreams.splice(index, 1);
+    }
+
+    this.setState({
+      removedStreams: rStreams,
+      shownStreams: sStreams
+    })
   }
 
   onActionsShow() {
@@ -215,6 +340,14 @@ class UserDropdown extends PureComponent {
     return Session.set('dropdownOpen', false);
   }
 
+  handleShowAndHideVideo(){
+    const { user } = this.props;
+
+    logger.info('HANDLE SHOW AND HIDE')
+    const handleStreamEvent = new CustomEvent('handleStream', { detail: { mediaElement: user.userId } });
+    window.dispatchEvent(handleStreamEvent);
+  }
+
   getUsersActions() {
     const {
       intl,
@@ -239,7 +372,7 @@ class UserDropdown extends PureComponent {
       meetingIsBreakout,
       mountModal,
     } = this.props;
-    const { showNestedOptions } = this.state;
+    const { showNestedOptions, removedStreams, shownStreams } = this.state;
 
     const amIModerator = currentUser.role === ROLE_MODERATOR;
     const actionPermissions = getAvailableActions(amIModerator, meetingIsBreakout, user, voiceUser);
@@ -309,6 +442,36 @@ class UserDropdown extends PureComponent {
         ),
         'user',
         'right_arrow',
+      ));
+    }
+
+    let videoIsShown = true
+    let userIsStreaming = false
+
+
+    removedStreams.forEach(s => {
+      if(s.toString().startsWith(user.userId.toString())){
+        videoIsShown = false
+        userIsStreaming = true
+      }
+    })
+
+    if(userIsStreaming === false){
+      shownStreams.forEach(s => {
+        if(s.toString().startsWith(user.userId.toString())){
+          userIsStreaming = true
+        }
+      })
+    }
+
+    logger.info('RENDER USER ACTIONS: '+userIsStreaming+" "+videoIsShown)
+
+    if(userIsStreaming === true){
+      actions.push(this.makeDropdownItem(
+          'ao',
+          videoIsShown ? "Remove user stream" : "Show user stream",
+          () => this.handleShowAndHideVideo(),
+          'user',
       ));
     }
 

@@ -385,10 +385,20 @@ class VideoPreview extends Component {
   handleStartSharing() {
     const { resolve, startSharing } = this.props;
     const { webcamDeviceId } = this.state;
-    //Session.set(webcamDeviceId, "video")
+    Session.set(webcamDeviceId, "video")
     this.stopTracks();
     startSharing(webcamDeviceId);
     if (resolve) resolve();
+  }
+
+  takePicture() {
+    const {
+      webcamDeviceId
+    } = this.props;
+    Session.set(webcamDeviceId, "video")
+    logger.info('SAVED')
+    let val = Session.get(webcamDeviceId)
+    logger.info(val)
   }
 
   handleStopSharing() {
@@ -470,6 +480,7 @@ class VideoPreview extends Component {
       });
       this.video.srcObject = stream;
       this.deviceStream = stream;
+      this.takePicture()
     }).catch((error) => {
       logger.warn({
         logCode: 'video_preview_do_gum_preview_error',

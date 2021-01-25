@@ -22,6 +22,8 @@ import PingPongContainer from '/imports/ui/components/ping-pong/container';
 import MediaService from '/imports/ui/components/media/service';
 import ManyWebcamsNotifier from '/imports/ui/components/video-provider/many-users-notify/container';
 import { styles } from './styles';
+import MediaContainer from "../media/container";
+/*eslint-disable*/
 
 const MOBILE_MEDIA = 'only screen and (max-width: 40em)';
 const APP_CONFIG = Meteor.settings.public.app;
@@ -99,11 +101,16 @@ class App extends Component {
     super();
     this.state = {
       enableResize: !window.matchMedia(MOBILE_MEDIA).matches,
+      removedStreams: [],
+      shownStreams: [],
     };
 
     this.handleWindowResize = throttle(this.handleWindowResize).bind(this);
     this.shouldAriaHide = this.shouldAriaHide.bind(this);
+
   }
+
+
 
   componentDidMount() {
     const {
@@ -148,6 +155,7 @@ class App extends Component {
     logger.info({ logCode: 'app_component_componentdidmount' }, 'Client loaded successfully');
   }
 
+
   componentDidUpdate(prevProps) {
     const {
       meetingMuted, notify, currentUserEmoji, intl, hasPublishedPoll,
@@ -186,7 +194,6 @@ class App extends Component {
 
   componentWillUnmount() {
     const { handleNetworkConnection } = this.props;
-    window.removeEventListener('resize', this.handleWindowResize, false);
     if (navigator.connection) {
       navigator.connection.addEventListener('change', handleNetworkConnection, false);
     }
@@ -206,7 +213,7 @@ class App extends Component {
   }
 
   renderPanel() {
-    const { enableResize } = this.state;
+    const { enableResize, removedStreams } = this.state;
     const { openPanel, isRTL } = this.props;
 
     return (
@@ -215,6 +222,7 @@ class App extends Component {
           openPanel,
           enableResize,
           isRTL,
+          removedStreams,
         }}
         shouldAriaHide={this.shouldAriaHide}
       />
